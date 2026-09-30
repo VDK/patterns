@@ -1,0 +1,484 @@
+import logging
+import re
+from collections import defaultdict
+from functools import lru_cache
+from typing import Dict, List, Optional, Tuple
+
+from patterns.backends import Backend, register
+from patterns.backends._common import provenance_header
+from patterns.corpus import BENIGN, VARIABLE_FIELDS
+from patterns.ir import IR
+
+logger = logging.getLogger(__name__)
+
+# A ModSecurity rule's operator decides whether it can become an nginx regex at
+# all. Only `@rx` is a regular expression; everything else is a numeric
+# comparison, a file lookup, a byte-range check or a libinjection detector, and
+# emitting it as a map key produces an entry that can never match a URI. Of the
+# 646 patterns extracted from CRS, 330 are in that second group, 181 of them
+# `@lt` paranoia-level guards, which are CRS control flow rather than attack
+# signatures.
+CONVERTIBLE_OPERATOR = "@rx"
+
+# The PCRE constructs Python's re does not parse. nginx matches with PCRE and
+# this module checks with Python's re, which is close but not identical, so a
+# handful of valid rules would be discarded as malformed. Each entry rewrites
+# one construct into something Python accepts. The rewrite is used only for the
+# check: what gets emitted is always the pattern CRS wrote.
+_PCRE_ONLY = (
+    # \x{263a}: a hex escape wider than two digits.
+    (re.compile(r"(?<!\\)\\x\{([0-9A-Fa-f]{1,6})\}"),
+     lambda m: ("\\u%04x" if int(m.group(1), 16) <= 0xFFFF else "\\U%08x")
+     % int(m.group(1), 16)),
+    # \z: end of subject. Python spells it \Z.
+    (re.compile(r"(?<!\\)\\z"), lambda m: "\\Z"),
+    # (?<name>...): Python requires (?P<name>...).
+    (re.compile(r"\(\?<([A-Za-z_]\w*)>"), lambda m: "(?P<%s>" % m.group(1)),
+    # (?>...): an atomic group. Python 3.11 has them, earlier versions do not.
+    (re.compile(r"\(\?>"), lambda m: "(?:"),
+)
+
+
+def _python_equivalent(pattern: str) -> str:
+    """Rewrites PCRE-only syntax so Python's re can parse the pattern."""
+    for expression, replacement in _PCRE_ONLY:
+        pattern = expression.sub(replacement, pattern)
+    return pattern
+
+
+@lru_cache(maxsize=256)  # Increased cache size
+def validate_regex(pattern: str) -> bool:
+    """Reports whether a pattern is a regular expression nginx could compile."""
+    try:
+        re.compile(_python_equivalent(pattern))
+        return True
+    except re.error as e:
+        logger.warning(f"Invalid regex: {pattern} - {e}")
+        return False
+
+def sanitize_pattern(pattern: str, location: str) -> Optional[str]:
+    """
+    Returns the regular expression a rule matches with, or None if it has none.
+
+    A ModSecurity operator decides whether a rule is a regular expression at
+    all. Only `@rx` is; the rest are numeric comparisons, phrase lists, file
+    lookups or libinjection detectors, and a map key built from one of those can
+    never match. A negated operator is dropped too: a map key says what matches,
+    not what fails to.
+
+    The expression itself is returned unchanged. nginx hands the contents of a
+    configuration string to PCRE, and PCRE is what CRS writes for, so there is
+    nothing to translate. Verified against nginx 1.31.5, matching against
+    $args: `\\d` matches a digit, `[0-9]` matches a digit, `sel.*from` matches
+    across characters, `foo$` anchors, `\\x{62}` matches a b, and `(?<!no)bad`
+    applies the lookbehind. What needs care is the configuration parser rather
+    than the regex, and that is _escape_for_config's job.
+    """
+    stripped = pattern.strip()
+    if stripped.startswith("!"):
+        # A negated operator inverts the match, which a map key cannot express.
+        logger.debug(f"Skipping negated operator: {pattern}")
+        return None
+    if stripped.startswith("@"):
+        if not stripped.startswith(CONVERTIBLE_OPERATOR + " "):
+            operator = stripped.split(None, 1)[0]
+            logger.debug(f"Skipping non-regex operator {operator}: {pattern}")
+            return None
+        stripped = stripped[len(CONVERTIBLE_OPERATOR):].strip()
+
+    # Every map key is matched case-insensitively or not by the ~ prefix
+    # is_case_insensitive picks, so an inline (?i) is redundant. It is removed
+    # rather than kept because nginx rejects it anywhere but the start.
+    stripped = stripped.replace("(?i)", "").strip()
+    return stripped or None
+
+
+def is_case_insensitive(pattern: str, transformations: List[str]) -> bool:
+    """
+    Reports whether a rule's pattern should be matched ignoring case.
+
+    CRS patterns are not case-insensitive by default. They are written to run
+    after the transformations the rule declares, and a rule that declares
+    `t:lowercase` is written in lower case because its input will be. Converted
+    without its transformations, such a pattern only matches lower-case attacks
+    unless the match itself ignores case.
+
+    So case-insensitivity is taken from the rule: `(?i)` in the pattern, or a
+    lowercasing transformation. Applying it to every rule instead, which is what
+    emitting `~*` unconditionally did, makes rules match strings their authors
+    excluded on purpose.
+    """
+    if "(?i)" in pattern:
+        return True
+    return any(t in ("lowercase", "cmdline", "normalizepath") for t in transformations)
+
+
+# nginx refuses a configuration parameter longer than this, in bytes.
+#
+# One over-long parameter is not one lost rule: nginx refuses the file, so the
+# whole rule set stops loading. That failure shipped once already (#22), which
+# is why the limit is measured rather than assumed.
+#
+# The previous value, 4096, was one above the boundary, and the comparison
+# against it emitted a key nginx refuses. Binary-searched with `nginx -t`, on
+# nginx 1.31.5 and on the nginx the Ubuntu runners install: 4095 bytes loads,
+# 4096 does not ("too long parameter, probably missing terminating \"
+# character"). The limit is on the parameter, not the line: a 4095-byte key
+# loads on a line of 4508 characters.
+#
+# tests/test_parameter_limit.py binary-searches the local nginx for the same
+# boundary and fails if this constant is above it, so a stricter build is caught
+# rather than assumed away with a margin.
+#
+# The limit counts bytes, and a Python string counts characters. The two agree
+# for every pattern CRS writes in a .conf file, which spells non-ASCII as
+# `\x{...}`, but not for the .data files behind `@pmFromFile`: ssrf.data
+# contains `\u2460` and `\u3002`, three bytes each. Measuring in characters
+# there produces a key that passes this check and takes the file down.
+NGINX_MAX_PARAMETER = 4095
+
+# The request component each rule location is matched against.
+LOCATION_VARIABLES = {
+    "request-uri": "$request_uri",
+    "query-string": "$args",
+    "user-agent": "$http_user_agent",
+    "host": "$http_host",
+    "referer": "$http_referer",
+    "content-type": "$http_content_type",
+}
+
+
+def _escape_for_config(pattern: str) -> str:
+    """
+    Escapes a regular expression so nginx's parser hands PCRE what CRS wrote.
+
+    Inside a double-quoted string nginx consumes the backslash in `\\\\`, `\\"` and
+    `\\'` and leaves every other backslash alone. Verified against nginx 1.31.5:
+    a key written `"a\\\\b"` matches a word boundary, `"a\\\\\\\\b"` matches a
+    literal backslash, and `"say\\"hi"` matches say"hi. So a pattern that means
+    to match a literal backslash has to arrive with its backslashes doubled, and
+    a quote has to arrive escaped.
+
+    Backslashes are doubled first: the backslash added in front of a quote is
+    one nginx is meant to consume, not one PCRE should see.
+    """
+    return pattern.replace("\\", "\\\\").replace('"', '\\"')
+
+
+def _sanitize_name(name: str) -> str:
+    """Reduces a name to what nginx accepts in a variable name."""
+    return re.sub(r"[^a-z0-9_]", "_", name.lower()).strip("_") or "generic"
+
+
+def _map_variable(source_variable: str) -> str:
+    """Names the variable a map writes into, from the variable it reads."""
+    return f"$waf_{_sanitize_name(source_variable.lstrip('$'))}"
+
+
+# A rule that does not refuse the request is not a signature. CRS runs plenty of
+# rules for their side effects: 921170 is `@rx .`, a pattern matching any
+# character, and it exists to count repeated parameter names. Emitted into a map
+# it matches every request that carries a query string.
+BLOCKING_ACTIONS = ("block", "deny", "drop")
+
+
+def blocks(rule: Dict) -> bool:
+    """
+    Reports whether a rule refuses the request, or only records something.
+
+    A rule that declares no disruptive action inherits SecDefaultAction, which
+    CRS sets to `pass`, so it does not block either.
+
+    A rules file written before owasp2json.py recorded this field has no such
+    key at all. Absence of the field is not evidence of `pass`, so those rules
+    are kept: the alternative is that upgrading the converter ahead of the data
+    silently empties the output.
+    """
+    if "action" not in rule:
+        return True
+    return rule["action"] in BLOCKING_ACTIONS
+
+
+def fires_on_ordinary_traffic(pattern: str, variable: str,
+                              ignore_case: bool) -> Optional[str]:
+    """
+    Returns the name of the first ordinary request a pattern matches, or None.
+
+    This is the check that decides what may be emitted. A converted rule has
+    lost the transformations it was written to run after, so a pattern that is
+    precise against a decoded value can be indiscriminate against a raw one:
+    920230 is `%[0-9a-fA-F]{2}` with `t:urlDecodeUni`, which means "still
+    percent-encoded after one decode", that is, double encoding. Against a raw
+    URI it means "contains a percent-encoded character", which is most ordinary
+    URLs. Whether a given rule survives that loss cannot be reasoned about rule
+    by rule, so it is measured against corpus.BENIGN.
+
+    Python's re stands in for PCRE here. The two differ on syntax, which
+    validate_regex already handles, not on what these patterns match.
+
+    Args:
+        pattern: The regular expression, as it will be emitted.
+        variable: The nginx variable the map is keyed on.
+        ignore_case: Whether the map key will carry the `~*` prefix.
+
+    Returns:
+        The `name` of the first matching benign request, or None if it matches
+        none of them.
+    """
+    field = VARIABLE_FIELDS.get(variable)
+    if field is None:
+        return None
+    try:
+        expression = re.compile(_python_equivalent(pattern),
+                                re.IGNORECASE if ignore_case else 0)
+    except re.error:
+        return None
+    for entry in BENIGN:
+        if expression.search(entry[field]):
+            return entry["name"]
+    return None
+
+
+def exclusion_report(not_blocking: int, too_long: int,
+                     noisy: List[Tuple[str, str, str]]) -> str:
+    """
+    Describes, in the generated file, what was left out of it and why.
+
+    A converter that drops rules silently is how this output came to load
+    cleanly and block nothing. An operator reading the file should be able to
+    see the size of what is missing without running the generator.
+    """
+    lines = ["# Rules deliberately not emitted:\n"]
+    if not_blocking:
+        lines.append(f"#   {not_blocking} record rather than refuse "
+                     "(they declare pass, or inherit it)\n")
+    if too_long:
+        lines.append(f"#   {too_long} exceed nginx's 4096-character parameter limit\n")
+    if noisy:
+        lines.append(f"#   {len(noisy)} match ordinary traffic once converted, "
+                     "so they cannot block:\n")
+        for rule_id, category, ordinary in noisy:
+            lines.append(f"#     {rule_id} ({category}) matches: {ordinary}\n")
+    if len(lines) == 1:
+        return "# No rules were excluded.\n"
+    return "".join(lines)
+
+
+def generate_nginx_waf(rules: List[Dict], crs_ref: str = "latest") -> Dict[str, str]:
+    """Builds the Nginx WAF configuration: maps, rules and a README."""
+
+    # source variable -> list of "key value" map entries
+    entries_by_variable: Dict[str, List[str]] = defaultdict(list)
+    severities_seen: set = set()
+    skipped_too_long = 0
+    skipped_not_blocking = 0
+    excluded_as_noisy: List[Tuple[str, str, str]] = []
+
+    for rule in rules:
+        rule_id = rule.get("id", "no_id")  # Get rule ID
+        category = rule.get("category", "generic").lower()
+        location = rule.get("location", "request-uri").lower() # set a default location
+        pattern = rule["pattern"]
+        severity = rule.get("severity", "medium").lower() # get severity
+
+        sanitized_pattern = sanitize_pattern(pattern, location)
+        if not sanitized_pattern or not validate_regex(sanitized_pattern):
+            continue  # Skip invalid or unsupported patterns
+
+        variable = LOCATION_VARIABLES.get(location)
+        if variable is None:
+            logger.warning(f"Unsupported location: {location} for rule: {rule_id}")
+            continue
+
+        if not blocks(rule):
+            skipped_not_blocking += 1
+            continue
+
+        # nginx reads the map key as a double-quoted string, so an unescaped
+        # quote inside the pattern ends the token early: the CRS pattern
+        # `charset\s*=\s*["\']?...` produced `unexpected "\'"` and the file
+        # would not load.
+        ignore_case = is_case_insensitive(pattern, rule.get("transformations") or [])
+
+        # Measured, not assumed: a rule that refuses ordinary traffic is not
+        # emitted, whatever its severity says.
+        ordinary = fires_on_ordinary_traffic(sanitized_pattern, variable, ignore_case)
+        if ordinary is not None:
+            excluded_as_noisy.append((rule_id, category, ordinary))
+            continue
+
+        prefix = "~*" if ignore_case else "~"
+        key = f'"{prefix}{_escape_for_config(sanitized_pattern)}"'
+        if len(key.encode("utf-8")) > NGINX_MAX_PARAMETER:
+            # nginx refuses a single configuration parameter longer than 4096
+            # characters ("too long parameter"), and one over-long pattern makes
+            # the whole file unloadable. Verified against nginx 1.31.5: the
+            # quoted token including `~*` may be at most 4096 characters.
+            skipped_too_long += 1
+            logger.warning(
+                f"Skipping rule {rule_id}: key is {len(key.encode('utf-8'))} "
+                f"bytes, over nginx's {NGINX_MAX_PARAMETER}-byte parameter limit"
+            )
+            continue
+
+        # The value carries the severity and the category, so an operator can
+        # read $waf_<variable> in a log to see what matched.
+        severities_seen.add(severity)
+        value = f'"{severity}:{_sanitize_name(category)}"'
+        entries_by_variable[variable].append(f"  {key} {value};")
+
+    if skipped_too_long:
+        logger.warning(
+            f"{skipped_too_long} rule(s) skipped for exceeding nginx's parameter limit"
+        )
+    if skipped_not_blocking:
+        logger.info(
+            f"{skipped_not_blocking} rule(s) skipped: they record rather than refuse"
+        )
+    for rule_id, category, ordinary in excluded_as_noisy:
+        logger.warning(
+            f"Excluding rule {rule_id} ({category}): it matches an ordinary "
+            f"request ({ordinary})"
+        )
+
+    # --- Generate Maps (waf_maps.conf) ---
+    #
+    # One map per source variable, keyed on the variable its patterns were
+    # written for. Keying every map on `$1`, as this generator used to, meant
+    # every lookup returned the default: `$1` holds a regular expression capture
+    # and nothing sets it here, so the rules matched nothing at all.
+    #
+    # No `http { }` wrapper: this file is included *into* the http context, and
+    # nginx does not allow a nested http block.
+    maps: List[str] = []
+    maps.append(provenance_header(crs_ref, Nginx.title))
+    maps.append("# Nginx WAF Maps (Generated by json2nginx.py)\n")
+    maps.append("#\n")
+    maps.append("# Include this file INSIDE your existing `http` block:\n")
+    maps.append("#\n")
+    maps.append("#   http {\n")
+    maps.append("#       include /path/to/waf_patterns/nginx/waf_maps.conf;\n")
+    maps.append("#   }\n")
+    maps.append("#\n")
+    maps.append("# Each map yields \"<severity>:<category>\" on a match, and \"\" otherwise.\n")
+    maps.append("#\n")
+    maps.append(exclusion_report(skipped_not_blocking, skipped_too_long,
+                             excluded_as_noisy))
+    maps.append("\n")
+
+    for variable in sorted(entries_by_variable):
+        name = _map_variable(variable)
+        maps.append(f"map {variable} {name} {{\n")
+        maps.append('  default "";\n')
+        maps.append("\n".join(entries_by_variable[variable]))
+        maps.append("\n}\n\n")
+
+
+    # --- Generate Rules (waf_rules.conf) ---
+    #
+    # Only `high` blocks. The previous version also emitted `add_header` inside
+    # `if`, which nginx rejects in server context ("add_header directive is not
+    # allowed here"), so the file could not load.
+    rules_out: List[str] = []
+    rules_out.append(provenance_header(crs_ref, Nginx.title))
+    rules_out.append("# Nginx WAF Rules (Generated by json2nginx.py)\n")
+    rules_out.append("#\n")
+    rules_out.append("# Include this file inside a `server` or `location` block.\n")
+    rules_out.append("# Requires waf_maps.conf to be included in the `http` block.\n")
+    rules_out.append("#\n")
+    variables = [_map_variable(v) for v in sorted(entries_by_variable)]
+
+    if "high" in severities_seen:
+        rules_out.append("# Requests matching a `high` severity pattern are refused with 403.\n")
+        rules_out.append("# Lower severities are recorded in the variables but do not block:\n")
+        rules_out.append("# they hold \"<severity>:<category>\" and are usable in log_format.\n\n")
+        for name in variables:
+            rules_out.append(f'if ({name} ~ "^high") {{\n')
+            rules_out.append("  return 403;\n")
+            rules_out.append("}\n")
+    else:
+        # Emitting `if` blocks that can never fire would suggest an
+        # enforcement this rule set cannot currently provide.
+        rules_out.append("# NOTHING IS BLOCKED BY THIS FILE.\n")
+        rules_out.append("#\n")
+        rules_out.append("# The rules extracted from the Core Rule Set carry no severity, so no\n")
+        rules_out.append("# pattern reaches the `high` level that would trigger a 403, and no\n")
+        rules_out.append("# blocking directive is emitted rather than one that can never fire.\n")
+        rules_out.append("#\n")
+        rules_out.append("# Matches are still recorded. These variables hold\n")
+        rules_out.append("# \"<severity>:<category>\" when a pattern matches, and \"\" otherwise:\n")
+        rules_out.append("#\n")
+        for name in variables:
+            rules_out.append(f"#   {name}\n")
+        rules_out.append("#\n")
+        rules_out.append("# Use them in log_format to see what would match your own traffic\n")
+        rules_out.append("# before enforcing anything:\n")
+        rules_out.append("#\n")
+        rules_out.append("#   log_format waf '$remote_addr $request \"$waf_request_uri\" \"$waf_args\"';\n")
+        rules_out.append("#\n")
+        rules_out.append("# To block on any match, uncomment the directives below. Measured\n")
+        rules_out.append("# against a running nginx, that blocks XSS, SQL injection, Log4Shell\n")
+        rules_out.append("# and path traversal, and also refuses an ordinary `?url=` or\n")
+        rules_out.append("# `?email=` parameter. That false-positive profile is what CRS itself\n")
+        rules_out.append("# manages with anomaly scoring, which this project does not have yet.\n")
+        rules_out.append("# Measure first, then decide. See\n")
+        rules_out.append("# https://github.com/fabriziosalmi/patterns/issues/45\n")
+        rules_out.append("#\n")
+        for name in variables:
+            rules_out.append(f"#   if ({name}) {{ return 403; }}\n")
+
+
+    # --- Generate README ---
+    readme: List[str] = []
+    readme.append("# Nginx WAF Configuration\n\n")
+    readme.append("This directory contains Nginx WAF configuration files generated from OWASP rules.\n\n")
+    readme.append("## Usage\n\n")
+    readme.append("1. **Include `waf_maps.conf` in your `http` block:**\n")
+    readme.append("   ```nginx\n")
+    readme.append("   http {\n")
+    readme.append("       include /path/to/waf_patterns/nginx/waf_maps.conf;\n")
+    readme.append("       # ... other http configurations ...\n")
+    readme.append("   }\n")
+    readme.append("   ```\n\n")
+    readme.append("2. **Include `waf_rules.conf` in your `server` or `location` block:**\n")
+    readme.append("   ```nginx\n")
+    readme.append("   server {\n")
+    readme.append("       # ... other server configurations ...\n")
+    readme.append("       include /path/to/waf_patterns/nginx/waf_rules.conf;\n")
+    readme.append("   }\n")
+    readme.append("   ```\n\n")
+    readme.append("3. **Reload Nginx:**\n")
+    readme.append("   ```bash\n")
+    readme.append("   sudo nginx -t && sudo systemctl reload nginx\n")
+    readme.append("   ```\n\n")
+    readme.append("## What this blocks\n\n")
+    readme.append("Read the top of `waf_rules.conf`: it says what is enforced.\n\n")
+    readme.append("Rules carry a severity, and only `high` blocks. The Core Rule Set\n")
+    readme.append("extraction does not currently produce severities, so on a default build\n")
+    readme.append("nothing is blocked and matches are only recorded in the `$waf_*`\n")
+    readme.append("variables. `waf_rules.conf` carries a ready-to-uncomment blocking\n")
+    readme.append("directive, and the measured trade-off of turning it on.\n\n")
+    readme.append("Log the variables against your own traffic before enforcing anything.\n\n")
+    readme.append("## Important Notes:\n\n")
+    readme.append("* **Testing is Crucial:**  Thoroughly test your WAF configuration with a variety of requests (both legitimate and malicious) to ensure it's working correctly and not causing false positives.\n")
+    readme.append("* **False Positives:**  WAF rules, especially those based on regex, can sometimes block legitimate traffic.  Monitor your Nginx logs and adjust the rules as needed.\n")
+    readme.append("* **Performance:** Complex regexes can impact performance.  Use the simplest regex that accurately matches the threat.\n")
+    readme.append("* **Updates:**  Regularly update the OWASP rules (by re-running `owasp2json.py` and `json2nginx.py`) to stay protected against new threats.\n")
+    readme.append("* **This is not a complete WAF:** This script provides a basic WAF based on pattern matching.  For more comprehensive protection, consider using a dedicated WAF solution like Nginx App Protect or ModSecurity.\n")
+
+    logger.info(f"Generated Nginx waf_maps.conf, waf_rules.conf and README.md "
+                f"({sum(len(e) for e in entries_by_variable.values())} entries)")
+    return {
+        "waf_maps.conf": "".join(maps),
+        "waf_rules.conf": "".join(rules_out),
+        "README.md": "".join(readme),
+    }
+
+
+@register
+class Nginx(Backend):
+    name = "nginx"
+    title = "Nginx"
+
+    def render(self, ir: IR) -> Dict[str, str]:
+        return generate_nginx_waf(ir.rules, ir.crs_ref)
