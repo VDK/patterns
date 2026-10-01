@@ -3,6 +3,8 @@ acl bad_bot hdr_sub(User-Agent) -i  YLT
 acl bad_bot hdr_sub(User-Agent) -i 008\/
 acl bad_bot hdr_sub(User-Agent) -i 13TABS
 acl bad_bot hdr_sub(User-Agent) -i 192\.comAgent
+acl bad_bot hdr_sub(User-Agent) -i 1Pilot
+acl bad_bot hdr_sub(User-Agent) -i 1h4x\.com
 acl bad_bot hdr_sub(User-Agent) -i 2GDPR\/
 acl bad_bot hdr_sub(User-Agent) -i 2ip\.ru
 acl bad_bot hdr_sub(User-Agent) -i 360Spider
@@ -13,6 +15,7 @@ acl bad_bot hdr_sub(User-Agent) -i 80legs
 acl bad_bot hdr_sub(User-Agent) -i A6-Indexer
 acl bad_bot hdr_sub(User-Agent) -i ADmantX
 acl bad_bot hdr_sub(User-Agent) -i AIBOT
+acl bad_bot hdr_sub(User-Agent) -i AIWebIndex
 acl bad_bot hdr_sub(User-Agent) -i ALittle\ Client
 acl bad_bot hdr_sub(User-Agent) -i APIs-Google
 acl bad_bot hdr_sub(User-Agent) -i ASPSeek
@@ -30,12 +33,16 @@ acl bad_bot hdr_sub(User-Agent) -i Adstxtaggregator
 acl bad_bot hdr_sub(User-Agent) -i Adyen HttpClient
 acl bad_bot hdr_sub(User-Agent) -i AfD-Verbotsverfahren
 acl bad_bot hdr_sub(User-Agent) -i AffiliateLabz\/
+acl bad_bot hdr_sub(User-Agent) -i Ahrefs
 acl bad_bot hdr_sub(User-Agent) -i AhrefsBot
+acl bad_bot hdr_sub(User-Agent) -i Ai2Bot
 acl bad_bot hdr_sub(User-Agent) -i AiHitBot
 acl bad_bot hdr_sub(User-Agent) -i Aipbot
 acl bad_bot hdr_sub(User-Agent) -i Airmail
 acl bad_bot hdr_sub(User-Agent) -i Alexibot
 acl bad_bot hdr_sub(User-Agent) -i Alibaba\.Security\.Heimdall
+acl bad_bot hdr_sub(User-Agent) -i Aliyun
+acl bad_bot hdr_sub(User-Agent) -i AliyunSecBot
 acl bad_bot hdr_sub(User-Agent) -i AllSubmitter
 acl bad_bot hdr_sub(User-Agent) -i Alligator
 acl bad_bot hdr_sub(User-Agent) -i AlphaBot
@@ -158,6 +165,7 @@ acl bad_bot hdr_sub(User-Agent) -i CERT\.at-Statistics-Survey
 acl bad_bot hdr_sub(User-Agent) -i CISPA Vulnerability Notification
 acl bad_bot hdr_sub(User-Agent) -i CISPA Web Analyser
 acl bad_bot hdr_sub(User-Agent) -i CJNetworkQuality
+acl bad_bot hdr_sub(User-Agent) -i CMS-Security-Auditor
 acl bad_bot hdr_sub(User-Agent) -i CODE87
 acl bad_bot hdr_sub(User-Agent) -i CSHttp
 acl bad_bot hdr_sub(User-Agent) -i CSSCheck
@@ -184,6 +192,7 @@ acl bad_bot hdr_sub(User-Agent) -i CirrusExplorer
 acl bad_bot hdr_sub(User-Agent) -i Citoid
 acl bad_bot hdr_sub(User-Agent) -i Claritybot
 acl bad_bot hdr_sub(User-Agent) -i Clarsentia
+acl bad_bot hdr_sub(User-Agent) -i Claude-User
 acl bad_bot hdr_sub(User-Agent) -i ClaudeBot
 acl bad_bot hdr_sub(User-Agent) -i Cliqzbot
 acl bad_bot hdr_sub(User-Agent) -i Cloud mapping
@@ -191,6 +200,7 @@ acl bad_bot hdr_sub(User-Agent) -i CloudEndure
 acl bad_bot hdr_sub(User-Agent) -i CloudFlare-AlwaysOnline
 acl bad_bot hdr_sub(User-Agent) -i Cloud\ mapping
 acl bad_bot hdr_sub(User-Agent) -i Cloudflare-Healthchecks
+acl bad_bot hdr_sub(User-Agent) -i Cloudflare-SSLDetector
 acl bad_bot hdr_sub(User-Agent) -i Cloudinary
 acl bad_bot hdr_sub(User-Agent) -i Cocolyzebot
 acl bad_bot hdr_sub(User-Agent) -i Cogentbot
@@ -206,6 +216,7 @@ acl bad_bot hdr_sub(User-Agent) -i Copyscape
 acl bad_bot hdr_sub(User-Agent) -i Cosmos
 acl bad_bot hdr_sub(User-Agent) -i Cosmos4j\.feedback
 acl bad_bot hdr_sub(User-Agent) -i Covario-IDS
+acl bad_bot hdr_sub(User-Agent) -i Cpanel-HTTP-Client
 acl bad_bot hdr_sub(User-Agent) -i Craftbot
 acl bad_bot hdr_sub(User-Agent) -i Craw\/
 acl bad_bot hdr_sub(User-Agent) -i Crawling\ at\ Home\ Project
@@ -236,6 +247,7 @@ acl bad_bot hdr_sub(User-Agent) -i Datafeedwatch
 acl bad_bot hdr_sub(User-Agent) -i Datanyze
 acl bad_bot hdr_sub(User-Agent) -i DataparkSearch
 acl bad_bot hdr_sub(User-Agent) -i Daum(oa)?[ \/][0-9]
+acl bad_bot hdr_sub(User-Agent) -i DebugBear$
 acl bad_bot hdr_sub(User-Agent) -i Demon
 acl bad_bot hdr_sub(User-Agent) -i DeuSu
 acl bad_bot hdr_sub(User-Agent) -i Deusu
@@ -275,7 +287,6 @@ acl bad_bot hdr_sub(User-Agent) -i DuplexWeb-Google
 acl bad_bot hdr_sub(User-Agent) -i DynatraceSynthetic
 acl bad_bot hdr_sub(User-Agent) -i EARTHCOM
 acl bad_bot hdr_sub(User-Agent) -i ECCP
-acl bad_bot hdr_sub(User-Agent) -i ECCP/1.0
 acl bad_bot hdr_sub(User-Agent) -i EMail Exractor
 acl bad_bot hdr_sub(User-Agent) -i EMail Wolf
 acl bad_bot hdr_sub(User-Agent) -i EMail\ Siphon
@@ -317,6 +328,7 @@ acl bad_bot hdr_sub(User-Agent) -i Faraday v
 acl bad_bot hdr_sub(User-Agent) -i FavOrg
 acl bad_bot hdr_sub(User-Agent) -i Faveeo
 acl bad_bot hdr_sub(User-Agent) -i Favicon downloader
+acl bad_bot hdr_sub(User-Agent) -i FediAct Service
 acl bad_bot hdr_sub(User-Agent) -i Feed Wrangler
 acl bad_bot hdr_sub(User-Agent) -i FeedBooster
 acl bad_bot hdr_sub(User-Agent) -i FeedBucket
@@ -338,12 +350,11 @@ acl bad_bot hdr_sub(User-Agent) -i Fever\/[0-9]
 acl bad_bot hdr_sub(User-Agent) -i Fiery%20Feeds
 acl bad_bot hdr_sub(User-Agent) -i Filestack
 acl bad_bot hdr_sub(User-Agent) -i Fimap
-acl bad_bot hdr_sub(User-Agent) -i Firefox/7.0
+acl bad_bot hdr_sub(User-Agent) -i Firefox/7\.0
 acl bad_bot hdr_sub(User-Agent) -i FlashGet
 acl bad_bot hdr_sub(User-Agent) -i FlipboardBrowserProxy
 acl bad_bot hdr_sub(User-Agent) -i FlipboardProxy
 acl bad_bot hdr_sub(User-Agent) -i FlipboardRSS
-acl bad_bot hdr_sub(User-Agent) -i Flock\/
 acl bad_bot hdr_sub(User-Agent) -i Florienzh\/
 acl bad_bot hdr_sub(User-Agent) -i Flunky
 acl bad_bot hdr_sub(User-Agent) -i Foobot
@@ -365,7 +376,9 @@ acl bad_bot hdr_sub(User-Agent) -i GT::WWW
 acl bad_bot hdr_sub(User-Agent) -i GTmetrix
 acl bad_bot hdr_sub(User-Agent) -i GalaxyBot
 acl bad_bot hdr_sub(User-Agent) -i GeedoProductSearch
+acl bad_bot hdr_sub(User-Agent) -i GeedoShopProductFinder
 acl bad_bot hdr_sub(User-Agent) -i Genieo
+acl bad_bot hdr_sub(User-Agent) -i GenomeCrawlerd
 acl bad_bot hdr_sub(User-Agent) -i GentleSource
 acl bad_bot hdr_sub(User-Agent) -i GermCrawler
 acl bad_bot hdr_sub(User-Agent) -i GetCode
@@ -379,6 +392,7 @@ acl bad_bot hdr_sub(User-Agent) -i Ghost Inspector
 acl bad_bot hdr_sub(User-Agent) -i GigablastOpenSource
 acl bad_bot hdr_sub(User-Agent) -i Gigabot
 acl bad_bot hdr_sub(User-Agent) -i GitHub-Hookshot
+acl bad_bot hdr_sub(User-Agent) -i GitLab\/
 acl bad_bot hdr_sub(User-Agent) -i Go [\d\.]* package http
 acl bad_bot hdr_sub(User-Agent) -i Go http package
 acl bad_bot hdr_sub(User-Agent) -i Go!Zilla
@@ -399,10 +413,13 @@ acl bad_bot hdr_sub(User-Agent) -i Google Page Speed Insights
 acl bad_bot hdr_sub(User-Agent) -i Google Search Console
 acl bad_bot hdr_sub(User-Agent) -i Google Web Preview
 acl bad_bot hdr_sub(User-Agent) -i Google favicon
+acl bad_bot hdr_sub(User-Agent) -i Google-AMPHTML
 acl bad_bot hdr_sub(User-Agent) -i Google-Ads
 acl bad_bot hdr_sub(User-Agent) -i Google-Adwords
+acl bad_bot hdr_sub(User-Agent) -i Google-Agent
 acl bad_bot hdr_sub(User-Agent) -i Google-Apps-Script
 acl bad_bot hdr_sub(User-Agent) -i Google-Calendar-Importer
+acl bad_bot hdr_sub(User-Agent) -i Google-Firebase
 acl bad_bot hdr_sub(User-Agent) -i Google-HTTP-Java-Client
 acl bad_bot hdr_sub(User-Agent) -i Google-HotelAdsVerifier
 acl bad_bot hdr_sub(User-Agent) -i Google-InspectionTool
@@ -416,8 +433,11 @@ acl bad_bot hdr_sub(User-Agent) -i Google-Structured-Data-Testing-Tool
 acl bad_bot hdr_sub(User-Agent) -i Google-Transparency-Report
 acl bad_bot hdr_sub(User-Agent) -i Google-Youtube-Links
 acl bad_bot hdr_sub(User-Agent) -i Google-speakr
+acl bad_bot hdr_sub(User-Agent) -i GoogleAgent-Mariner
+acl bad_bot hdr_sub(User-Agent) -i GoogleAssociationService
 acl bad_bot hdr_sub(User-Agent) -i GoogleDocs
 acl bad_bot hdr_sub(User-Agent) -i GoogleHC\/
+acl bad_bot hdr_sub(User-Agent) -i GoogleMessages
 acl bad_bot hdr_sub(User-Agent) -i GoogleOther
 acl bad_bot hdr_sub(User-Agent) -i GoogleProber
 acl bad_bot hdr_sub(User-Agent) -i GoogleProducer
@@ -436,6 +456,7 @@ acl bad_bot hdr_sub(User-Agent) -i GridBot
 acl bad_bot hdr_sub(User-Agent) -i GuzzleHttp
 acl bad_bot hdr_sub(User-Agent) -i HAA(A)?RTLAND http client
 acl bad_bot hdr_sub(User-Agent) -i HEADMasterSEO
+acl bad_bot hdr_sub(User-Agent) -i HF-Research\/
 acl bad_bot hdr_sub(User-Agent) -i HMView
 acl bad_bot hdr_sub(User-Agent) -i HTMLparser
 acl bad_bot hdr_sub(User-Agent) -i HTTP Banner Detection
@@ -453,9 +474,9 @@ acl bad_bot hdr_sub(User-Agent) -i HappyApps-WebCheck
 acl bad_bot hdr_sub(User-Agent) -i Hardenize
 acl bad_bot hdr_sub(User-Agent) -i Harvest
 acl bad_bot hdr_sub(User-Agent) -i Hatena
+acl bad_bot hdr_sub(User-Agent) -i HaveInListEnricher
 acl bad_bot hdr_sub(User-Agent) -i Havij
 acl bad_bot hdr_sub(User-Agent) -i HaxerMen
-acl bad_bot hdr_sub(User-Agent) -i HeadlessChrome
 acl bad_bot hdr_sub(User-Agent) -i HeartRails_Capture
 acl bad_bot hdr_sub(User-Agent) -i Heritrix
 acl bad_bot hdr_sub(User-Agent) -i Hexometer
@@ -472,6 +493,7 @@ acl bad_bot hdr_sub(User-Agent) -i HubSpot
 acl bad_bot hdr_sub(User-Agent) -i HubSpot-Link-Resolver
 acl bad_bot hdr_sub(User-Agent) -i Humanlinks
 acl bad_bot hdr_sub(User-Agent) -i HybridBot
+acl bad_bot hdr_sub(User-Agent) -i IAB-Tech-Lab
 acl bad_bot hdr_sub(User-Agent) -i IDBTE4M
 acl bad_bot hdr_sub(User-Agent) -i IDBot
 acl bad_bot hdr_sub(User-Agent) -i IDG Twitter Links Resolver
@@ -507,6 +529,7 @@ acl bad_bot hdr_sub(User-Agent) -i InfoTekies
 acl bad_bot hdr_sub(User-Agent) -i InfoWizards Reciprocal Link
 acl bad_bot hdr_sub(User-Agent) -i Information\ Security\ Team\ InfraSec\ Scanner
 acl bad_bot hdr_sub(User-Agent) -i InfraSec\ Scanner
+acl bad_bot hdr_sub(User-Agent) -i Infrawatch\/[0-9]
 acl bad_bot hdr_sub(User-Agent) -i Instapaper
 acl bad_bot hdr_sub(User-Agent) -i Integrity
 acl bad_bot hdr_sub(User-Agent) -i Intelliseek
@@ -591,6 +614,7 @@ acl bad_bot hdr_sub(User-Agent) -i LinkTiger
 acl bad_bot hdr_sub(User-Agent) -i LinkWalker
 acl bad_bot hdr_sub(User-Agent) -i Linkbot
 acl bad_bot hdr_sub(User-Agent) -i LinkextractorPro
+acl bad_bot hdr_sub(User-Agent) -i Linkfeed\.ru
 acl bad_bot hdr_sub(User-Agent) -i LinkpadBot
 acl bad_bot hdr_sub(User-Agent) -i LinksManager
 acl bad_bot hdr_sub(User-Agent) -i LinqiaMetadataDownloaderBot
@@ -625,6 +649,7 @@ acl bad_bot hdr_sub(User-Agent) -i Mail.RU_Bot
 acl bad_bot hdr_sub(User-Agent) -i Mail::STS
 acl bad_bot hdr_sub(User-Agent) -i MailChimp
 acl bad_bot hdr_sub(User-Agent) -i Mail\.Ru
+acl bad_bot hdr_sub(User-Agent) -i Mailpit\/
 acl bad_bot hdr_sub(User-Agent) -i Majestic-SEO
 acl bad_bot hdr_sub(User-Agent) -i Majestic12
 acl bad_bot hdr_sub(User-Agent) -i Majestic\ SEO
@@ -670,13 +695,16 @@ acl bad_bot hdr_sub(User-Agent) -i Miniflux
 acl bad_bot hdr_sub(User-Agent) -i Miro-HttpClient
 acl bad_bot hdr_sub(User-Agent) -i Mister PiX
 acl bad_bot hdr_sub(User-Agent) -i Mister\ PiX
+acl bad_bot hdr_sub(User-Agent) -i MistralAI-User
 acl bad_bot hdr_sub(User-Agent) -i Mnogosearch
 acl bad_bot hdr_sub(User-Agent) -i Moblie\ Safari
+acl bad_bot hdr_sub(User-Agent) -i ModatScanner\/[0-9]
 acl bad_bot hdr_sub(User-Agent) -i Mojeek
 acl bad_bot hdr_sub(User-Agent) -i Mojolicious
 acl bad_bot hdr_sub(User-Agent) -i Mojolicious \(Perl\)
 acl bad_bot hdr_sub(User-Agent) -i Mollie
 acl bad_bot hdr_sub(User-Agent) -i MolokaiBot
+acl bad_bot hdr_sub(User-Agent) -i MonSpark
 acl bad_bot hdr_sub(User-Agent) -i MonTools
 acl bad_bot hdr_sub(User-Agent) -i Monit\/
 acl bad_bot hdr_sub(User-Agent) -i Monitority\/
@@ -723,6 +751,7 @@ acl bad_bot hdr_sub(User-Agent) -i Netpursual
 acl bad_bot hdr_sub(User-Agent) -i Netsparker
 acl bad_bot hdr_sub(User-Agent) -i Nettrack
 acl bad_bot hdr_sub(User-Agent) -i Netvibes
+acl bad_bot hdr_sub(User-Agent) -i NetworkingExtension
 acl bad_bot hdr_sub(User-Agent) -i Neustar WPM
 acl bad_bot hdr_sub(User-Agent) -i NeutrinoAPI
 acl bad_bot hdr_sub(User-Agent) -i NewRelicPinger
@@ -730,6 +759,7 @@ acl bad_bot hdr_sub(User-Agent) -i NewsBlur .*Finder
 acl bad_bot hdr_sub(User-Agent) -i NewsGator
 acl bad_bot hdr_sub(User-Agent) -i Nexgate Ruby Client
 acl bad_bot hdr_sub(User-Agent) -i NextGenSearchBot
+acl bad_bot hdr_sub(User-Agent) -i Next\.js Middleware
 acl bad_bot hdr_sub(User-Agent) -i Nibbler
 acl bad_bot hdr_sub(User-Agent) -i NihilScio
 acl bad_bot hdr_sub(User-Agent) -i Niki-bot
@@ -744,6 +774,7 @@ acl bad_bot hdr_sub(User-Agent) -i Nodemeter
 acl bad_bot hdr_sub(User-Agent) -i Norton-Safeweb
 acl bad_bot hdr_sub(User-Agent) -i Notifixious
 acl bad_bot hdr_sub(User-Agent) -i NotionEmbedder
+acl bad_bot hdr_sub(User-Agent) -i NovaAct
 acl bad_bot hdr_sub(User-Agent) -i Nuclei
 acl bad_bot hdr_sub(User-Agent) -i Nutch
 acl bad_bot hdr_sub(User-Agent) -i Nuzzel
@@ -753,6 +784,7 @@ acl bad_bot hdr_sub(User-Agent) -i OPPO A33
 acl bad_bot hdr_sub(User-Agent) -i Observatory\/
 acl bad_bot hdr_sub(User-Agent) -i Ocelli\/
 acl bad_bot hdr_sub(User-Agent) -i Octopus
+acl bad_bot hdr_sub(User-Agent) -i Odin
 acl bad_bot hdr_sub(User-Agent) -i Offline Explorer
 acl bad_bot hdr_sub(User-Agent) -i Offline Navigator
 acl bad_bot hdr_sub(User-Agent) -i Offline\ Explorer
@@ -807,6 +839,7 @@ acl bad_bot hdr_sub(User-Agent) -i Pearltrees
 acl bad_bot hdr_sub(User-Agent) -i Peew
 acl bad_bot hdr_sub(User-Agent) -i PeoplePal
 acl bad_bot hdr_sub(User-Agent) -i Perlu -
+acl bad_bot hdr_sub(User-Agent) -i Perplexity-User
 acl bad_bot hdr_sub(User-Agent) -i Petalbot
 acl bad_bot hdr_sub(User-Agent) -i PhantomJS Screenshoter
 acl bad_bot hdr_sub(User-Agent) -i PhantomJS\/
@@ -825,6 +858,7 @@ acl bad_bot hdr_sub(User-Agent) -i Pingoscope
 acl bad_bot hdr_sub(User-Agent) -i Pixray
 acl bad_bot hdr_sub(User-Agent) -i Pizilla
 acl bad_bot hdr_sub(User-Agent) -i Plagger\/
+acl bad_bot hdr_sub(User-Agent) -i PlayStore-Google
 acl bad_bot hdr_sub(User-Agent) -i PleaseCrawl
 acl bad_bot hdr_sub(User-Agent) -i Pleroma 
 acl bad_bot hdr_sub(User-Agent) -i Ploetz \+ Zeller
@@ -860,6 +894,7 @@ acl bad_bot hdr_sub(User-Agent) -i PxBroker
 acl bad_bot hdr_sub(User-Agent) -i PyCurl
 acl bad_bot hdr_sub(User-Agent) -i Python-httplib2
 acl bad_bot hdr_sub(User-Agent) -i Python-urllib
+acl bad_bot hdr_sub(User-Agent) -i Python-xmlrpc
 acl bad_bot hdr_sub(User-Agent) -i QQDownload
 acl bad_bot hdr_sub(User-Agent) -i Qirina Hurdler
 acl bad_bot hdr_sub(User-Agent) -i QrafterPro
@@ -917,8 +952,10 @@ acl bad_bot hdr_sub(User-Agent) -i RuxitSynthetic
 acl bad_bot hdr_sub(User-Agent) -i RyowlEngine
 acl bad_bot hdr_sub(User-Agent) -i SAP NetWeaver Application Server
 acl bad_bot hdr_sub(User-Agent) -i SBIder
+acl bad_bot hdr_sub(User-Agent) -i SEBot-WA
 acl bad_bot hdr_sub(User-Agent) -i SEO Browser
 acl bad_bot hdr_sub(User-Agent) -i SEOCentro
+acl bad_bot hdr_sub(User-Agent) -i SEOGets
 acl bad_bot hdr_sub(User-Agent) -i SEOkicks
 acl bad_bot hdr_sub(User-Agent) -i SEOkicks-Robot
 acl bad_bot hdr_sub(User-Agent) -i SEOlizer
@@ -928,6 +965,7 @@ acl bad_bot hdr_sub(User-Agent) -i SEOprofiler
 acl bad_bot hdr_sub(User-Agent) -i SEOsearch
 acl bad_bot hdr_sub(User-Agent) -i SEOstats
 acl bad_bot hdr_sub(User-Agent) -i SISTRIX
+acl bad_bot hdr_sub(User-Agent) -i SMARTSEO-checker
 acl bad_bot hdr_sub(User-Agent) -i SMRF URL Expander
 acl bad_bot hdr_sub(User-Agent) -i SMTBot
 acl bad_bot hdr_sub(User-Agent) -i SMUrlExpander
@@ -976,6 +1014,7 @@ acl bad_bot hdr_sub(User-Agent) -i SenutoBot
 acl bad_bot hdr_sub(User-Agent) -i Seo Servis
 acl bad_bot hdr_sub(User-Agent) -i SeoCheck
 acl bad_bot hdr_sub(User-Agent) -i SeoCherryBot
+acl bad_bot hdr_sub(User-Agent) -i SeoLik\.ru
 acl bad_bot hdr_sub(User-Agent) -i SeoSiteCheckup
 acl bad_bot hdr_sub(User-Agent) -i Seobility
 acl bad_bot hdr_sub(User-Agent) -i SeobilityBot
@@ -1042,7 +1081,6 @@ acl bad_bot hdr_sub(User-Agent) -i Spbot
 acl bad_bot hdr_sub(User-Agent) -i Specificfeeds
 acl bad_bot hdr_sub(User-Agent) -i SpeedKit
 acl bad_bot hdr_sub(User-Agent) -i Spider_Bot
-acl bad_bot hdr_sub(User-Agent) -i Spider_Bot/3.0
 acl bad_bot hdr_sub(User-Agent) -i Spinn3r
 acl bad_bot hdr_sub(User-Agent) -i SplitSignalBot
 acl bad_bot hdr_sub(User-Agent) -i Sprinklr 
@@ -1070,6 +1108,7 @@ acl bad_bot hdr_sub(User-Agent) -i Surphace Scout
 acl bad_bot hdr_sub(User-Agent) -i SurveyBot
 acl bad_bot hdr_sub(User-Agent) -i Suzuran
 acl bad_bot hdr_sub(User-Agent) -i Swiftbot
+acl bad_bot hdr_sub(User-Agent) -i Swisscows Favicons
 acl bad_bot hdr_sub(User-Agent) -i Symfony BrowserKit
 acl bad_bot hdr_sub(User-Agent) -i Symfony2 BrowserKit
 acl bad_bot hdr_sub(User-Agent) -i SynHttpClient-Built
@@ -1079,6 +1118,7 @@ acl bad_bot hdr_sub(User-Agent) -i Sysomos
 acl bad_bot hdr_sub(User-Agent) -i Szukacz
 acl bad_bot hdr_sub(User-Agent) -i T0PHackTeam
 acl bad_bot hdr_sub(User-Agent) -i T8Abot
+acl bad_bot hdr_sub(User-Agent) -i TLM-Audit-Scanner
 acl bad_bot hdr_sub(User-Agent) -i TLSProbe\/
 acl bad_bot hdr_sub(User-Agent) -i Tarantula\/
 acl bad_bot hdr_sub(User-Agent) -i Taringa UGC
@@ -1103,6 +1143,7 @@ acl bad_bot hdr_sub(User-Agent) -i ThumbSniper
 acl bad_bot hdr_sub(User-Agent) -i Thumbor
 acl bad_bot hdr_sub(User-Agent) -i Thumbshots
 acl bad_bot hdr_sub(User-Agent) -i TightTwatBot
+acl bad_bot hdr_sub(User-Agent) -i Timpibot
 acl bad_bot hdr_sub(User-Agent) -i TinEye
 acl bad_bot hdr_sub(User-Agent) -i Tiny Tiny RSS
 acl bad_bot hdr_sub(User-Agent) -i TinyTestBot
@@ -1186,7 +1227,6 @@ acl bad_bot hdr_sub(User-Agent) -i WWW::Mechanize
 acl bad_bot hdr_sub(User-Agent) -i WWWOFFLE
 acl bad_bot hdr_sub(User-Agent) -i WakeletLinkExpander
 acl bad_bot hdr_sub(User-Agent) -i Wallpapers
-acl bad_bot hdr_sub(User-Agent) -i Wallpapers/3.0
 acl bad_bot hdr_sub(User-Agent) -i WallpapersHD
 acl bad_bot hdr_sub(User-Agent) -i Wallpapers\/[0-9]+
 acl bad_bot hdr_sub(User-Agent) -i Wappalyzer
@@ -1196,6 +1236,7 @@ acl bad_bot hdr_sub(User-Agent) -i WeLikeLinks
 acl bad_bot hdr_sub(User-Agent) -i WeSEE
 acl bad_bot hdr_sub(User-Agent) -i Web Auto
 acl bad_bot hdr_sub(User-Agent) -i Web Collage
+acl bad_bot hdr_sub(User-Agent) -i Web Downloader\/[0-9]
 acl bad_bot hdr_sub(User-Agent) -i Web Enhancer
 acl bad_bot hdr_sub(User-Agent) -i Web Fetch
 acl bad_bot hdr_sub(User-Agent) -i Web Fuck
@@ -1253,6 +1294,7 @@ acl bad_bot hdr_sub(User-Agent) -i Website\ Quester
 acl bad_bot hdr_sub(User-Agent) -i Websnapr
 acl bad_bot hdr_sub(User-Agent) -i Webster
 acl bad_bot hdr_sub(User-Agent) -i Webthumb\/
+acl bad_bot hdr_sub(User-Agent) -i Webzio-Extended
 acl bad_bot hdr_sub(User-Agent) -i Wfuzz\/
 acl bad_bot hdr_sub(User-Agent) -i Whack
 acl bad_bot hdr_sub(User-Agent) -i Whacker
@@ -1265,6 +1307,7 @@ acl bad_bot hdr_sub(User-Agent) -i WhereGoes\?
 acl bad_bot hdr_sub(User-Agent) -i Whibse
 acl bad_bot hdr_sub(User-Agent) -i WhoAPI\/
 acl bad_bot hdr_sub(User-Agent) -i WhoRunsCoinHive
+acl bad_bot hdr_sub(User-Agent) -i Who\.is\ Bot
 acl bad_bot hdr_sub(User-Agent) -i Whynder Magnet
 acl bad_bot hdr_sub(User-Agent) -i Widow
 acl bad_bot hdr_sub(User-Agent) -i WinHTTP\/
@@ -1326,9 +1369,8 @@ acl bad_bot hdr_sub(User-Agent) -i ZoominfoBot
 acl bad_bot hdr_sub(User-Agent) -i ZoteroTranslationServer
 acl bad_bot hdr_sub(User-Agent) -i ZumBot
 acl bad_bot hdr_sub(User-Agent) -i ZyBorg
-acl bad_bot hdr_sub(User-Agent) -i [a-z0-9\-_]*(bot|crawl|archiver|transcoder|spider|uptime|validator|fetcher|cron|checker|reader|extractor|monitoring|analyzer|scraper)
+acl bad_bot hdr_sub(User-Agent) -i [a-z0-9\-_]*(bot|crawl|headless|archiver|transcoder|spider|uptime|validator|fetcher|cron|checker|reader|extractor|monitoring|analyzer|scraper)
 acl bad_bot hdr_sub(User-Agent) -i ^Aether
-acl bad_bot hdr_sub(User-Agent) -i ^Amazon CloudFront
 acl bad_bot hdr_sub(User-Agent) -i ^Amazon Simple Notification Service Agent$
 acl bad_bot hdr_sub(User-Agent) -i ^Amazon-Route53-Health-Check-Service
 acl bad_bot hdr_sub(User-Agent) -i ^COMODO DCV
@@ -1336,14 +1378,18 @@ acl bad_bot hdr_sub(User-Agent) -i ^Calypso v\/
 acl bad_bot hdr_sub(User-Agent) -i ^Corax
 acl bad_bot hdr_sub(User-Agent) -i ^DHSH
 acl bad_bot hdr_sub(User-Agent) -i ^DangDang
+acl bad_bot hdr_sub(User-Agent) -i ^Dart\/[0-9]
 acl bad_bot hdr_sub(User-Agent) -i ^DavClnt
 acl bad_bot hdr_sub(User-Agent) -i ^Expanse
+acl bad_bot hdr_sub(User-Agent) -i ^ExposureScanner
 acl bad_bot hdr_sub(User-Agent) -i ^FDM 
 acl bad_bot hdr_sub(User-Agent) -i ^Goose\/
+acl bad_bot hdr_sub(User-Agent) -i ^Goosee-Audit
 acl bad_bot hdr_sub(User-Agent) -i ^Grabber
 acl bad_bot hdr_sub(User-Agent) -i ^Gradle\/
 acl bad_bot hdr_sub(User-Agent) -i ^HTTPClient\/
 acl bad_bot hdr_sub(User-Agent) -i ^HTTPing
+acl bad_bot hdr_sub(User-Agent) -i ^Hello from Palo Alto Networks
 acl bad_bot hdr_sub(User-Agent) -i ^Java\/
 acl bad_bot hdr_sub(User-Agent) -i ^Jeode\/
 acl bad_bot hdr_sub(User-Agent) -i ^Jetty\/
@@ -1375,10 +1421,12 @@ acl bad_bot hdr_sub(User-Agent) -i ^pnpm\/
 acl bad_bot hdr_sub(User-Agent) -i ^symbolicator\/
 acl bad_bot hdr_sub(User-Agent) -i ^twine\/
 acl bad_bot hdr_sub(User-Agent) -i ^ureq
+acl bad_bot hdr_sub(User-Agent) -i ^visionheight\.com\/scan
 acl bad_bot hdr_sub(User-Agent) -i a3logics\.in
 acl bad_bot hdr_sub(User-Agent) -i a\.pr-cy\.ru
 acl bad_bot hdr_sub(User-Agent) -i aboutthedomain
 acl bad_bot hdr_sub(User-Agent) -i acebookexternalhit\/
+acl bad_bot hdr_sub(User-Agent) -i acme\.sectigo\.com
 acl bad_bot hdr_sub(User-Agent) -i acoon
 acl bad_bot hdr_sub(User-Agent) -i acrylicapps\.com\/pulp
 acl bad_bot hdr_sub(User-Agent) -i adbeat
@@ -1395,9 +1443,11 @@ acl bad_bot hdr_sub(User-Agent) -i akka-http\/
 acl bad_bot hdr_sub(User-Agent) -i akula\/
 acl bad_bot hdr_sub(User-Agent) -i alertra
 acl bad_bot hdr_sub(User-Agent) -i alexa site audit
+acl bad_bot hdr_sub(User-Agent) -i allenai\.org
 acl bad_bot hdr_sub(User-Agent) -i allloadin
 acl bad_bot hdr_sub(User-Agent) -i alyze\.info
 acl bad_bot hdr_sub(User-Agent) -i amagit
+acl bad_bot hdr_sub(User-Agent) -i amphp\/http-client
 acl bad_bot hdr_sub(User-Agent) -i annotate_google
 acl bad_bot hdr_sub(User-Agent) -i anthropic-ai
 acl bad_bot hdr_sub(User-Agent) -i apimon\.de
@@ -1405,11 +1455,13 @@ acl bad_bot hdr_sub(User-Agent) -i arachnode
 acl bad_bot hdr_sub(User-Agent) -i archive.org_bot
 acl bad_bot hdr_sub(User-Agent) -i aria2
 acl bad_bot hdr_sub(User-Agent) -i arquivo-web-crawler
+acl bad_bot hdr_sub(User-Agent) -i arquivo\.pt
 acl bad_bot hdr_sub(User-Agent) -i asafaweb
 acl bad_bot hdr_sub(User-Agent) -i asynchttp
 acl bad_bot hdr_sub(User-Agent) -i attohttpc
 acl bad_bot hdr_sub(User-Agent) -i autocite
 acl bad_bot hdr_sub(User-Agent) -i autoemailspider
+acl bad_bot hdr_sub(User-Agent) -i awario\.com
 acl bad_bot hdr_sub(User-Agent) -i awin\.com
 acl bad_bot hdr_sub(User-Agent) -i axios\/
 acl bad_bot hdr_sub(User-Agent) -i backlink-check
@@ -1422,15 +1474,18 @@ acl bad_bot hdr_sub(User-Agent) -i binlar
 acl bad_bot hdr_sub(User-Agent) -i biz_Directory
 acl bad_bot hdr_sub(User-Agent) -i boitho\.com-dc
 acl bad_bot hdr_sub(User-Agent) -i caam dot crwlr at gmail dot com
+acl bad_bot hdr_sub(User-Agent) -i cah\.io\.community
 acl bad_bot hdr_sub(User-Agent) -i catexplorador
 acl bad_bot hdr_sub(User-Agent) -i censys
 acl bad_bot hdr_sub(User-Agent) -i cf-facebook
 acl bad_bot hdr_sub(User-Agent) -i cg-eye
 acl bad_bot hdr_sub(User-Agent) -i changedetection
 acl bad_bot hdr_sub(User-Agent) -i chatterino-api-cache
+acl bad_bot hdr_sub(User-Agent) -i check1\.exe
 acl bad_bot hdr_sub(User-Agent) -i checkprivacy
 acl bad_bot hdr_sub(User-Agent) -i chkme\.com
 acl bad_bot hdr_sub(User-Agent) -i clark-crawler
+acl bad_bot hdr_sub(User-Agent) -i claude-web
 acl bad_bot hdr_sub(User-Agent) -i clips\.ua\.ac\.be
 acl bad_bot hdr_sub(User-Agent) -i cmcm\.com
 acl bad_bot hdr_sub(User-Agent) -i coccoc
@@ -1444,12 +1499,15 @@ acl bad_bot hdr_sub(User-Agent) -i contentkingapp
 acl bad_bot hdr_sub(User-Agent) -i convera
 acl bad_bot hdr_sub(User-Agent) -i copyright sheriff
 acl bad_bot hdr_sub(User-Agent) -i cortex\/
+acl bad_bot hdr_sub(User-Agent) -i cpp-httplib
 acl bad_bot hdr_sub(User-Agent) -i crawler4j
+acl bad_bot hdr_sub(User-Agent) -i crawler\.feedback
 acl bad_bot hdr_sub(User-Agent) -i curb
 acl bad_bot hdr_sub(User-Agent) -i curl
 acl bad_bot hdr_sub(User-Agent) -i cuwhois\/
 acl bad_bot hdr_sub(User-Agent) -i cybo\.com
 acl bad_bot hdr_sub(User-Agent) -i dBpoweramp
+acl bad_bot hdr_sub(User-Agent) -i dataforseo\.com
 acl bad_bot hdr_sub(User-Agent) -i dataforseobot
 acl bad_bot hdr_sub(User-Agent) -i dataprovider
 acl bad_bot hdr_sub(User-Agent) -i ddline
@@ -1459,6 +1517,7 @@ acl bad_bot hdr_sub(User-Agent) -i demandbase-bot
 acl bad_bot hdr_sub(User-Agent) -i developers\.google\.com\/\+\/web\/snippet\/
 acl bad_bot hdr_sub(User-Agent) -i dlvr
 acl bad_bot hdr_sub(User-Agent) -i docoloc
+acl bad_bot hdr_sub(User-Agent) -i domainsproject\.org
 acl bad_bot hdr_sub(User-Agent) -i dotMailer content retrieval
 acl bad_bot hdr_sub(User-Agent) -i dotSemantic
 acl bad_bot hdr_sub(User-Agent) -i downforeveryoneorjustme
@@ -1491,6 +1550,7 @@ acl bad_bot hdr_sub(User-Agent) -i findlink
 acl bad_bot hdr_sub(User-Agent) -i findthatfile
 acl bad_bot hdr_sub(User-Agent) -i fluffy
 acl bad_bot hdr_sub(User-Agent) -i flynxapp
+acl bad_bot hdr_sub(User-Agent) -i foda-scanner\/[0-9]
 acl bad_bot hdr_sub(User-Agent) -i forensiq
 acl bad_bot hdr_sub(User-Agent) -i fragFINN\.de
 acl bad_bot hdr_sub(User-Agent) -i free thumbnails
@@ -1523,6 +1583,7 @@ acl bad_bot hdr_sub(User-Agent) -i heritrix
 acl bad_bot hdr_sub(User-Agent) -i historious
 acl bad_bot hdr_sub(User-Agent) -i hkedcity
 acl bad_bot hdr_sub(User-Agent) -i hledejLevne\.cz
+acl bad_bot hdr_sub(User-Agent) -i holubem\.eu
 acl bad_bot hdr_sub(User-Agent) -i hosterstats
 acl bad_bot hdr_sub(User-Agent) -i ht:\/\/check
 acl bad_bot hdr_sub(User-Agent) -i htdig
@@ -1547,7 +1608,9 @@ acl bad_bot hdr_sub(User-Agent) -i iThemes Sync\/
 acl bad_bot hdr_sub(User-Agent) -i iZSearch
 acl bad_bot hdr_sub(User-Agent) -i ichiro
 acl bad_bot hdr_sub(User-Agent) -i igdeSpyder
+acl bad_bot hdr_sub(User-Agent) -i imagesift\.com
 acl bad_bot hdr_sub(User-Agent) -i imagineeasy
+acl bad_bot hdr_sub(User-Agent) -i imgproxy\/[0-9]
 acl bad_bot hdr_sub(User-Agent) -i imgsizer
 acl bad_bot hdr_sub(User-Agent) -i inbound\.li parser
 acl bad_bot hdr_sub(User-Agent) -i infegy
@@ -1565,6 +1628,7 @@ acl bad_bot hdr_sub(User-Agent) -i ips-agent
 acl bad_bot hdr_sub(User-Agent) -i iqdb\/
 acl bad_bot hdr_sub(User-Agent) -i isUp\.li
 acl bad_bot hdr_sub(User-Agent) -i isitup\.org
+acl bad_bot hdr_sub(User-Agent) -i isitwp\.com
 acl bad_bot hdr_sub(User-Agent) -i iskanie
 acl bad_bot hdr_sub(User-Agent) -i iubenda-radar
 acl bad_bot hdr_sub(User-Agent) -i janforman
@@ -1574,11 +1638,16 @@ acl bad_bot hdr_sub(User-Agent) -i khttp\/
 acl bad_bot hdr_sub(User-Agent) -i knows\.is
 acl bad_bot hdr_sub(User-Agent) -i kouio
 acl bad_bot hdr_sub(User-Agent) -i krawler\.dk
+acl bad_bot hdr_sub(User-Agent) -i krynos
 acl bad_bot hdr_sub(User-Agent) -i kube-probe
 acl bad_bot hdr_sub(User-Agent) -i kubectl
 acl bad_bot hdr_sub(User-Agent) -i kulturarw3
+acl bad_bot hdr_sub(User-Agent) -i l9scan
+acl bad_bot hdr_sub(User-Agent) -i l9tcpid\/
+acl bad_bot hdr_sub(User-Agent) -i leakix
 acl bad_bot hdr_sub(User-Agent) -i leakix\.net
 acl bad_bot hdr_sub(User-Agent) -i letsencrypt
+acl bad_bot hdr_sub(User-Agent) -i libredtail-http
 acl bad_bot hdr_sub(User-Agent) -i libwww
 acl bad_bot hdr_sub(User-Agent) -i limber\.io
 acl bad_bot hdr_sub(User-Agent) -i link-check
@@ -1588,6 +1657,7 @@ acl bad_bot hdr_sub(User-Agent) -i linkdex
 acl bad_bot hdr_sub(User-Agent) -i linkdexbot
 acl bad_bot hdr_sub(User-Agent) -i linkfluence
 acl bad_bot hdr_sub(User-Agent) -i linkpeek
+acl bad_bot hdr_sub(User-Agent) -i litellm-recon
 acl bad_bot hdr_sub(User-Agent) -i livedoor ScreenShot
 acl bad_bot hdr_sub(User-Agent) -i localsearch-web
 acl bad_bot hdr_sub(User-Agent) -i longurl-r-package
@@ -1608,6 +1678,7 @@ acl bad_bot hdr_sub(User-Agent) -i masscan\/
 acl bad_bot hdr_sub(User-Agent) -i mattermost
 acl bad_bot hdr_sub(User-Agent) -i meanpathbot
 acl bad_bot hdr_sub(User-Agent) -i mediawords
+acl bad_bot hdr_sub(User-Agent) -i meta-externalagent
 acl bad_bot hdr_sub(User-Agent) -i mio_httpc
 acl bad_bot hdr_sub(User-Agent) -i mixdata dot com
 acl bad_bot hdr_sub(User-Agent) -i mixed-content-scan
@@ -1640,10 +1711,13 @@ acl bad_bot hdr_sub(User-Agent) -i nuhk
 acl bad_bot hdr_sub(User-Agent) -i nutch
 acl bad_bot hdr_sub(User-Agent) -i nyawc\/
 acl bad_bot hdr_sub(User-Agent) -i oBot
+acl bad_bot hdr_sub(User-Agent) -i odin\.com
 acl bad_bot hdr_sub(User-Agent) -i oegp
 acl bad_bot hdr_sub(User-Agent) -i okhttp
 acl bad_bot hdr_sub(User-Agent) -i omgili
 acl bad_bot hdr_sub(User-Agent) -i openai
+acl bad_bot hdr_sub(User-Agent) -i openai\.com
+acl bad_bot hdr_sub(User-Agent) -i opendirme-credhunt
 acl bad_bot hdr_sub(User-Agent) -i orion-semantics
 acl bad_bot hdr_sub(User-Agent) -i ow\.ly
 acl bad_bot hdr_sub(User-Agent) -i ownCloud News
@@ -1653,6 +1727,7 @@ acl bad_bot hdr_sub(User-Agent) -i page\ scorer
 acl bad_bot hdr_sub(User-Agent) -i page_verifier
 acl bad_bot hdr_sub(User-Agent) -i panscient
 acl bad_bot hdr_sub(User-Agent) -i parsijoo
+acl bad_bot hdr_sub(User-Agent) -i pathscan\/[0-9]
 acl bad_bot hdr_sub(User-Agent) -i pcBrowser
 acl bad_bot hdr_sub(User-Agent) -i peerindex
 acl bad_bot hdr_sub(User-Agent) -i php-requests
@@ -1680,7 +1755,9 @@ acl bad_bot hdr_sub(User-Agent) -i redback\/
 acl bad_bot hdr_sub(User-Agent) -i request\.js
 acl bad_bot hdr_sub(User-Agent) -i reqwest\/
 acl bad_bot hdr_sub(User-Agent) -i ripz
+acl bad_bot hdr_sub(User-Agent) -i s1z\.ru
 acl bad_bot hdr_sub(User-Agent) -i safe-agent-scanner
+acl bad_bot hdr_sub(User-Agent) -i satoristudio\.net
 acl bad_bot hdr_sub(User-Agent) -i sc-downloader
 acl bad_bot hdr_sub(User-Agent) -i scalaj-http
 acl bad_bot hdr_sub(User-Agent) -i scan\.lol
@@ -1702,11 +1779,13 @@ acl bad_bot hdr_sub(User-Agent) -i servernfo
 acl bad_bot hdr_sub(User-Agent) -i sexsearcher
 acl bad_bot hdr_sub(User-Agent) -i shortURL lengthener
 acl bad_bot hdr_sub(User-Agent) -i shrinktheweb
+acl bad_bot hdr_sub(User-Agent) -i sitechecker\.pro
 acl bad_bot hdr_sub(User-Agent) -i siteripz
 acl bad_bot hdr_sub(User-Agent) -i sitexy\.com
 acl bad_bot hdr_sub(User-Agent) -i sli-systems\.com
 acl bad_bot hdr_sub(User-Agent) -i slider\.com
 acl bad_bot hdr_sub(User-Agent) -i slurp
+acl bad_bot hdr_sub(User-Agent) -i smart-seo-tools\.sbs
 acl bad_bot hdr_sub(User-Agent) -i sniptracker
 acl bad_bot hdr_sub(User-Agent) -i sogou web
 acl bad_bot hdr_sub(User-Agent) -i sogouspider
@@ -1715,6 +1794,7 @@ acl bad_bot hdr_sub(User-Agent) -i sp_auditbot
 acl bad_bot hdr_sub(User-Agent) -i spaziodati
 acl bad_bot hdr_sub(User-Agent) -i speedy
 acl bad_bot hdr_sub(User-Agent) -i spray-can
+acl bad_bot hdr_sub(User-Agent) -i spy4x-domain-scanner
 acl bad_bot hdr_sub(User-Agent) -i spyfu
 acl bad_bot hdr_sub(User-Agent) -i spyonweb
 acl bad_bot hdr_sub(User-Agent) -i sqlmap
@@ -1727,6 +1807,7 @@ acl bad_bot hdr_sub(User-Agent) -i tAkeOut
 acl bad_bot hdr_sub(User-Agent) -i tchelebi\.io
 acl bad_bot hdr_sub(User-Agent) -i techiaith\.cymru
 acl bad_bot hdr_sub(User-Agent) -i teoma
+acl bad_bot hdr_sub(User-Agent) -i terrabot-owned-you
 acl bad_bot hdr_sub(User-Agent) -i terrainformatica
 acl bad_bot hdr_sub(User-Agent) -i testuri
 acl bad_bot hdr_sub(User-Agent) -i theinternetrules
@@ -1734,14 +1815,19 @@ acl bad_bot hdr_sub(User-Agent) -i timewe\.net
 acl bad_bot hdr_sub(User-Agent) -i topster
 acl bad_bot hdr_sub(User-Agent) -i touche\.com
 acl bad_bot hdr_sub(User-Agent) -i tracemyfile
+acl bad_bot hdr_sub(User-Agent) -i trafilatura
+acl bad_bot hdr_sub(User-Agent) -i trendiction\.com
+acl bad_bot hdr_sub(User-Agent) -i trendiction\.de
 acl bad_bot hdr_sub(User-Agent) -i trendspottr
 acl bad_bot hdr_sub(User-Agent) -i truwoGPS
 acl bad_bot hdr_sub(User-Agent) -i tweetedtimes
 acl bad_bot hdr_sub(User-Agent) -i twibble
 acl bad_bot hdr_sub(User-Agent) -i ubermetrics-technologies
+acl bad_bot hdr_sub(User-Agent) -i ubermetrics-technologies\.com
 acl bad_bot hdr_sub(User-Agent) -i uclassify
 acl bad_bot hdr_sub(User-Agent) -i ultimate_sitemap_parser
 acl bad_bot hdr_sub(User-Agent) -i unchaos
+acl bad_bot hdr_sub(User-Agent) -i undici
 acl bad_bot hdr_sub(User-Agent) -i unirest-java
 acl bad_bot hdr_sub(User-Agent) -i unshortenit
 acl bad_bot hdr_sub(User-Agent) -i updated
@@ -1753,6 +1839,7 @@ acl bad_bot hdr_sub(User-Agent) -i visionutils
 acl bad_bot hdr_sub(User-Agent) -i vkShare
 acl bad_bot hdr_sub(User-Agent) -i voltron
 acl bad_bot hdr_sub(User-Agent) -i voyager\/
+acl bad_bot hdr_sub(User-Agent) -i voyagerx\.com
 acl bad_bot hdr_sub(User-Agent) -i w3af\.org
 acl bad_bot hdr_sub(User-Agent) -i wangling
 acl bad_bot hdr_sub(User-Agent) -i web-capture\.net
@@ -1762,6 +1849,7 @@ acl bad_bot hdr_sub(User-Agent) -i webkit2png
 acl bad_bot hdr_sub(User-Agent) -i webmastercoffee
 acl bad_bot hdr_sub(User-Agent) -i webmeup-crawler
 acl bad_bot hdr_sub(User-Agent) -i webmon 
+acl bad_bot hdr_sub(User-Agent) -i webpros\.com
 acl bad_bot hdr_sub(User-Agent) -i webprosbot
 acl bad_bot hdr_sub(User-Agent) -i webscreenie
 acl bad_bot hdr_sub(User-Agent) -i websitepulse agent
@@ -1773,6 +1861,7 @@ acl bad_bot hdr_sub(User-Agent) -i wmtips
 acl bad_bot hdr_sub(User-Agent) -i woorankreview
 acl bad_bot hdr_sub(User-Agent) -i worldping-api
 acl bad_bot hdr_sub(User-Agent) -i wotbox
+acl bad_bot hdr_sub(User-Agent) -i wp2shell
 acl bad_bot hdr_sub(User-Agent) -i wpif
 acl bad_bot hdr_sub(User-Agent) -i wprecon\.com survey
 acl bad_bot hdr_sub(User-Agent) -i wscheck
@@ -1780,11 +1869,13 @@ acl bad_bot hdr_sub(User-Agent) -i www\.monitor\.us
 acl bad_bot hdr_sub(User-Agent) -i x09Mozilla
 acl bad_bot hdr_sub(User-Agent) -i x22Mozilla
 acl bad_bot hdr_sub(User-Agent) -i xpymep([0-9]?)\.exe
+acl bad_bot hdr_sub(User-Agent) -i xpymep1\.exe
 acl bad_bot hdr_sub(User-Agent) -i yacy
 acl bad_bot hdr_sub(User-Agent) -i yanga
 acl bad_bot hdr_sub(User-Agent) -i yeti
 acl bad_bot hdr_sub(User-Agent) -i yomins\.com
 acl bad_bot hdr_sub(User-Agent) -i yoogliFetchAgent
 acl bad_bot hdr_sub(User-Agent) -i yourls\.org
+acl bad_bot hdr_sub(User-Agent) -i zauba\.io
 acl bad_bot hdr_sub(User-Agent) -i zgrab
 http-request deny if bad_bot
