@@ -2,7 +2,7 @@
 # A pattern file: one regular expression to a line. Load it with `-f` and `-i`:
 #   acl bad_bot hdr(user-agent) -m reg -i -f /etc/haproxy/waf/bots.acl
 #   http-request deny if bad_bot
-# Left out, an ordinary client would be refused: Apache-HttpClient (matches linkedinbot)
+# Left out, an ordinary client would be refused: Apache-HttpClient (matches apache httpclient)
 # Left out, an ordinary client would be refused: Disco (matches discord link preview)
 # Left out, an ordinary client would be refused: Pingdom (matches pingdom)
 # Left out, an ordinary client would be refused: StatusCake (matches statuscake)

@@ -1,4 +1,4 @@
-# Left out, an ordinary client would be refused: Apache-HttpClient (matches linkedinbot)
+# Left out, an ordinary client would be refused: Apache-HttpClient (matches apache httpclient)
 # Left out, an ordinary client would be refused: Disco (matches discord link preview)
 # Left out, an ordinary client would be refused: Pingdom (matches pingdom)
 # Left out, an ordinary client would be refused: StatusCake (matches statuscake)
